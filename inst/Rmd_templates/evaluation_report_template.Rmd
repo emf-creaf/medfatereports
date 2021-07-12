@@ -118,6 +118,11 @@ saveRDS(res, file = file_name)
     plot(res, type="SoilTheta")
 ```
 
+## Plant LAI
+```{r eval = params$model=="spwb", fig.height=6, fig.width=8}
+     plot(res, type = 'PlantLAI', bySpecies = TRUE)
+```
+
 ## Plant stress
 ```{r eval = params$model=="spwb", fig.height=6, fig.width=8}
      plot(res, type = 'PlantStress', bySpecies = TRUE)
