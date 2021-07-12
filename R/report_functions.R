@@ -52,17 +52,15 @@ report_render <- function(type = 'evaluation',
 #' @export
 run_reports <- function(type = 'evaluation',
                         sites, model, confs,
-                        wd = getwd()) {
+                        wd) {
 
   for(conf in confs) {
     for (code in sites) {
-      report_name <- file.path('Output', packageVersion('medfate')[[1]],
-                               code,
-                               model, conf, code,
-                               paste0(code, "_", type, '_report.html'))
-
       report_folder <- file.path('Output', packageVersion('medfate')[[1]],
                                  model, conf, code)
+      report_name <- file.path(report_folder,
+                               paste0(type, '_report.html'))
+
 
       report_render(type, report_name, report_folder,
                     wd = wd, code = code, model = model, conf = conf)

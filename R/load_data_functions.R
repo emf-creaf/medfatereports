@@ -214,7 +214,7 @@ load_remarks <- function(site) {
 #'
 #' @export
 load_list<-function(code, includeTrees = TRUE, includeShrubs = TRUE) {
-  data(SpParamsMED)
+  data(SpParamsMED, envir = environment())
   l = list()
   l$treeData <- load_treeData(code)
   if(!includeTrees) {

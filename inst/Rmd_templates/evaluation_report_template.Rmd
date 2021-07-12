@@ -1,5 +1,5 @@
 ---
-title: "Evaluation report for `r params$code`, model `r params$model`, configuration `r params$conf`"
+title: "Evaluation report for `r params$code`/`r params$model`/`r params$conf`"
 author: "Victor Granda / Miquel De Cáceres"
 date: "`r Sys.time()`"
 params:
@@ -10,6 +10,7 @@ params:
 output:
   html_document:
     df_print: paged
+    toc: true
 ---
 
 ```{r setup, include=FALSE}
@@ -24,15 +25,18 @@ library(medfate)
 library(medfatereports)
 library(dplyr)
 library(ggplot2)
+library(gridExtra)
+library(cowplot)
 ```
 
-```{r data, message=FALSE, warning=TRUE}
+```{r data, message=FALSE, warning=FALSE}
 
 control <- yaml::yaml.load_file(system.file("yaml_configurations", paste0(params$conf, ".yaml"),
                                           package = "medfatereports"))
 
 site_data <- load_list(params$code)
 
+eval_REW <- "SWC" %in% names(site_data$measuredData)
 ```
 
 # General Info
@@ -86,24 +90,67 @@ if(params$model=="spwb") {
 }
 ```
 
-```{r plot_simple, eval = TRUE, fig.height=6, fig.width=8}
-# show the plot only if simple mode must be performed
-if (params$conf %in% c('basic', 'advanced')) {
-    # P/PET plot
-    plot(res)
-    # ET plot
-    plot(res, type = 'Evapotranspiration')
-    # SWC plot
-    plot(res, type = 'SoilTheta')
-    # Stress plot
-    plot(res, type = 'PlantStress', bySpecies = TRUE)
-    # Short wave radiation leaf
-    plot(res, type = 'GrossPhotosynthesisPerLeaf', bySpecies = TRUE)
-    # plant transpiration by leaf
-    plot(res, type = 'TranspirationPerLeaf', bySpecies = TRUE)
-}
+
+```{r}
+# saving result
+file_name <- file.path(file.path('Output', packageVersion('medfate')[[1]],
+                                 params$model, params$conf, params$code),
+                       paste0('simulation_result.rds'))
+file_name
+saveRDS(res, file = file_name)
+```
+# Output plots
+
+## PET & precipitation
+```{r eval = params$model=="spwb", fig.height=6, fig.width=8}
+    plot(res, type="PET_Precipitation")
 ```
 
+
+
+## Evapotranspiration
+```{r eval = params$model=="spwb", fig.height=6, fig.width=8}
+    plot(res, type="Evapotranspiration")
+```
+
+## Soil moisture content
+```{r eval = params$model=="spwb", fig.height=6, fig.width=8}
+    plot(res, type="SoilTheta")
+```
+
+## Plant stress
+```{r eval = params$model=="spwb", fig.height=6, fig.width=8}
+     plot(res, type = 'PlantStress', bySpecies = TRUE)
+```
+
+## Transpiration per leaf
+```{r eval = params$model=="spwb", fig.height=6, fig.width=8}
+     plot(res, type = 'TranspirationPerLeaf', bySpecies = TRUE)
+```
+
+## Gross photosynthesis per leaf
+```{r eval = params$model=="spwb", fig.height=6, fig.width=8}
+     plot(res, type = 'GrossPhotosynthesisPerLeaf', bySpecies = TRUE)
+```
+
+# Evaluation
+
+## Soil moisture
+```{r eval = eval_REW}
+medfate::evaluation_stats(res, site_data$measuredData, type="REW")
+```
+
+
+```{r eval = eval_REW, fig.height=6, fig.width=8}
+g1<-medfate::evaluation_plot(res, site_data$measuredData, type="REW")+
+  theme(legend.position = c(0.2,0.9), legend.background = element_blank())
+g1
+```
+
+```{r eval = eval_REW, fig.height=6, fig.width=8}
+g2<-medfate::evaluation_plot(res, site_data$measuredData, type="REW", plotType = "scatter")
+g2
+```
 
 # Input object
 
@@ -111,15 +158,10 @@ if (params$conf %in% c('basic', 'advanced')) {
   print(input_object)
 ```
 
+
 # Session Info
 
 ```{r session_info}
-# saving objects
-# file_name <- file.path('Output', packageVersion('medfate')[[1]],
-#                        params$code,
-#                        paste0(params$code, '_',
-#                               'evaluation_report_objects.RData'))
-# save(list = ls(all.names = TRUE), file = file_name)
 # printing session info
 devtools::session_info()
 ```
