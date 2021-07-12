@@ -4,7 +4,7 @@ Version: 0.0.0.9000
 Authors@R: c(
     person("Miquel", "De Cáceres", email = "miquelcaceres@gmail.com", role = "cre"),
     person("Víctor", "Granda", email = "victorgrandagarcia@gmail.com", role = "aut"))
-Description: Internal package for automated medfate model evaluation
+Description: Package for automated medfate model running and evaluation
 Depends: R (>= 3.4.1)
 License: What license is it under?
 Encoding: UTF-8
