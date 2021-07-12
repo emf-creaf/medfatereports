@@ -1,0 +1,89 @@
+modifyInput: yes
+fillMissingSpParams: yes
+verbose: yes
+subdailyResults: no
+transpirationMode: Sperry
+soilFunctions: VG
+defaultWindSpeed: 2.5
+snowpack: yes
+leafPhenology: yes
+rockyLayerDrainage: yes
+unlimitedSoilWater: no
+plantWaterPools: no
+unfoldingDD: 300.0
+verticalLayerSize: 100.0
+windMeasurementHeight: 200.0
+cavitationRefill: rate
+ndailysteps: 24.0
+nsubsteps: 3600.0
+cochard: no
+capacitance: yes
+taper: yes
+multiLayerBalance: no
+gainModifier: 1.0
+costModifier: 1.0
+costWater: dEdP
+klatstem: 0.01
+klatleaf: 0.01
+numericParams:
+  maxNsteps: 400.0
+  ntrial: 200.0
+  psiTol: 0.0001
+  ETol: 1.0e-07
+fracLeafResistance: .na
+fracRootResistance: 0.4
+averageFracRhizosphereResistance: 0.15
+Catm: 386.0
+thermalCapacityLAI: 1000000.0
+boundaryLayerSize: 2000.0
+refillMaximumRate: 0.1
+allowDessication: yes
+allowStarvation: yes
+allowDefoliation: yes
+sinkLimitation: yes
+shrubDynamics: no
+allocationStrategy: Plant_kmax
+nonStomatalPhotosynthesisLimitation: yes
+phloemConductanceFactor: 0.2
+nonSugarConcentration: 0.25
+equilibriumOsmoticConcentration:
+  leaf: 0.8
+  sapwood: 0.6
+minimumRelativeSugarForGrowth: 0.5
+respirationRates:
+  leaf: 0.0026027
+  sapwood: 6.849315e-05
+  fineroot: 0.0020548
+turnoverRates:
+  sapwood: 0.0001261
+  fineroot: 0.0018972
+constructionCosts:
+  leaf: 1.5
+  sapwood: 1.47
+  fineroot: 1.3
+maximumRelativeGrowthRates:
+  leaf: 0.01
+  sapwood: 0.002
+  fineroot: 0.1
+mortalityMode: density/deterministic
+mortalityBaselineRate: 0.01
+mortalityRelativeSugarThreshold: 0.3
+mortalityRWCThreshold: 0.3
+recruitmentMode: deterministic
+removeDeadCohorts: yes
+minimumCohortDensity: 1.0
+seedRain: ~
+seedProductionTreeHeight: 300.0
+seedProductionShrubHeight: 30.0
+minTempRecr: 0.0
+minMoistureRecr: 0.3
+minFPARRecr: 10.0
+recrTreeDBH: 1.0
+recrTreeDensity: 100.0
+recrTreeHeight: 100.0
+recrShrubCover: 1.0
+recrShrubHeight: 10.0
+recrTreeZ50: 100.0
+recrShrubZ50: 50.0
+recrTreeZ95: 1000.0
+recrShrubZ95: 500.0
