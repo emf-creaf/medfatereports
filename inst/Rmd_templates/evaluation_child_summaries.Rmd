@@ -1,0 +1,96 @@
+
+```{r message=FALSE, warning=FALSE}
+out_paths = rep("", length(codes))
+input_objects = vector("list", length(codes))
+res = vector("list", length(codes))
+site_data = vector("list", length(codes))
+for(i in 1:length(codes)) {
+   out_paths[i] <- file.path('Output', packageVersion('medfate')[[1]], params$model, params$conf, codes[i])
+   file_name_input <- file.path(out_paths[i],
+                       paste0('simulation_input.rds'))
+   file_name_output <- file.path(out_paths[i],
+                       paste0('simulation_result.rds'))
+   input_objects[[i]] = readRDS(file_name_input)
+   res[[i]] = readRDS(file_name_output)
+   site_data[[i]] <- medfatereports::load_list(codes[i])
+}
+```
+
+
+## Soil moisture
+```{r}
+df<-NULL
+codesOut <- character()
+for(i in 1:length(codes)) {
+  eval_REW <- "SWC" %in% names(site_data[[i]]$measuredData)
+  if(eval_REW) {
+    v<-medfate::evaluation_stats(res[[i]], site_data[[i]]$measuredData, type= "REW")
+    if(is.null(df)) df <- v
+    else df <- cbind(df, v)
+    codesOut <-c(codesOut, codes[i])
+  }
+}
+if(!is.null(df)) {
+  df <- as.data.frame(t(df), row.names = codesOut)
+  knitr::kable(df)
+}
+```
+
+
+## Plant transpiration
+
+```{r}
+df<-NULL
+cohNamesOut <- character()
+codesOut <- character()
+for(i in 1:length(codes)) {
+  cohNames <- row.names(input_objects[[i]]$cohorts)
+  for(j in 1:length(cohNames)) {
+    measured_var <- paste0("E_", cohNames[j])
+    if(measured_var %in% names(site_data[[i]]$measuredData)) {
+      v<-medfate::evaluation_stats(res[[i]], site_data[[i]]$measuredData, 
+                                   type= "E", cohort = cohNames[j])
+      if(is.null(df)) df <- v
+      else df <- cbind(df, v)
+      cohNamesOut <-c(cohNamesOut, cohNames[j])
+      codesOut<- c(codesOut, codes[i])
+    }
+  }
+}
+if(!is.null(df)) {
+  df <- data.frame(plot = codesOut, cohort = cohNamesOut, t(df))
+  knitr::kable(df, row.names = FALSE)
+}
+```
+
+## Leaf water potentials
+
+```{r}
+df<-NULL
+wpNamesOut <- character()
+cohNamesOut <- character()
+codesOut <- character()
+for(i in 1:length(codes)) {
+  control<- input_objects[[i]]$control
+  if(control$transpirationMode =="Sperry") {
+    cohNames <- row.names(input_objects[[i]]$cohorts)
+    for(j in 1:length(cohNames)) {
+      measured_var <- paste0("MD_", cohNames[j])
+      if(measured_var %in% names(site_data[[i]]$measuredData)) {
+        v<-medfate::evaluation_stats(res[[i]], site_data[[i]]$measuredData, 
+                                   type= "WP", cohort = cohNames[j])
+        if(is.null(df)) df <- v
+        else df <- rbind(df, v)
+        wpNamesOut <-c(wpNamesOut, row.names(v))
+        cohNamesOut <-c(cohNamesOut, rep(cohNames[j],2))
+        codesOut<- c(codesOut, rep(codes[i],2))
+      }
+    }
+  }
+}
+if(!is.null(df)) {
+  df <- data.frame(plot = codesOut, cohort = cohNamesOut, WP = wpNamesOut, df)
+  df<- df[order(wpNamesOut),]
+  knitr::kable(df, row.names = FALSE)
+}
+```

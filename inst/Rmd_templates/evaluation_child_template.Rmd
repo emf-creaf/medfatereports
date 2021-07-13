@@ -25,7 +25,7 @@ res = readRDS(file_name_output)
 
 ### Soil moisture
 ```{r eval = eval_REW}
-medfate::evaluation_stats(res, site_data$measuredData, type="REW")
+knitr::kable(as.data.frame(t(medfate::evaluation_stats(res, site_data$measuredData, type="REW"))))
 ```
 
 
@@ -60,7 +60,7 @@ for(i in 1:length(cohNames)) {
 }
 if(!is.null(df)) {
   df <- as.data.frame(t(df), row.names = cohNamesOut)
-  print(df)
+  knitr::kable(df)
 }
 ```
 
@@ -88,11 +88,12 @@ for(i in 1:length(cohNames)) {
 }
 ```
 
-`r if(control$transpirationMode =="Sperry") print("### Leaf water potentials")`
+### Leaf water potentials
 
 ```{r eval=(control$transpirationMode =="Sperry")}
 cohNames <- row.names(input_object$cohorts)
 df<-NULL
+wpNamesOut <- character()
 cohNamesOut <- character()
 for(i in 1:length(cohNames)) {
   measured_var <- paste0("MD_", cohNames[i])
@@ -100,11 +101,15 @@ for(i in 1:length(cohNames)) {
       v<-medfate::evaluation_stats(res, site_data$measuredData, type= "WP", cohort = cohNames[i])
       if(is.null(df)) df <- v
       else df <- rbind(df, v)
-      cohNamesOut <-c(cohNamesOut, cohNames[i])
+      wpNamesOut <-c(wpNamesOut, row.names(v))
+      cohNamesOut <-c(cohNamesOut, rep(cohNames[i],2))
   }
 }
 if(!is.null(df)) {
-  print(df)
+  df <- data.frame(cohort = cohNamesOut, WP = wpNamesOut, df)
+  df<- df[order(wpNamesOut),]
+  knitr::kable(df, row.names = FALSE)
+
 }
 ```
 
