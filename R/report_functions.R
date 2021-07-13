@@ -26,7 +26,7 @@ report_render <- function(type = 'evaluation',
 
   if (type == 'evaluation') {
     # render the template with the code indicated in the ... argument
-    rmarkdown::render(input = system.file("Rmd_templates", "evaluation_report_template.Rmd",
+    rmarkdown::render(input = system.file("Rmd_templates", "run_evaluation_report_template.Rmd",
                                           package = "medfatereports"),
                       output_format = c('html_document'),
                       output_file = output_file,
@@ -52,7 +52,8 @@ report_render <- function(type = 'evaluation',
 #' @export
 run_reports <- function(type = 'evaluation',
                         sites, model, confs,
-                        wd) {
+                        wd,
+                        save_plots = TRUE) {
 
   for(conf in confs) {
     for (code in sites) {
@@ -63,7 +64,8 @@ run_reports <- function(type = 'evaluation',
 
 
       report_render(type, report_name, report_folder,
-                    wd = wd, code = code, model = model, conf = conf)
+                    wd = wd, code = code, model = model, conf = conf,
+                    save_plots = save_plots)
     }
   }
 }

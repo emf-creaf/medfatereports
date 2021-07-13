@@ -19,7 +19,7 @@ load_forest<-function(site) {
 #' @export
 load_treeData <- function(site) {
   # file route
-  location <- file.path(pkg.globals$site_data_path,'Sites_data', site, paste0(site, '_treeData.txt'))
+  location <- file.path(get_data_path(),'Sites_data', site, paste0(site, '_treeData.txt'))
   # load data
   tree_data <- read.table(location, header = TRUE, sep = '\t', dec = '.',
                           stringsAsFactors = FALSE)

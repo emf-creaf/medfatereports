@@ -1,0 +1,96 @@
+
+```{r message=FALSE, warning=FALSE}
+out_path <- file.path('Output', packageVersion('medfate')[[1]], params$model, params$conf, params$code)
+if(params$save_plots) {
+  out_plots <- file.path(out_path, 'Plots')
+  if (!dir.exists(out_plots) && params$save_plots) {
+    dir.create(out_plots, recursive = TRUE)
+  }
+}
+```
+
+
+```{r}
+file_name_input <- file.path(out_path,
+                       paste0('simulation_input.rds'))
+file_name_output <- file.path(out_path,
+                       paste0('simulation_result.rds'))
+input_object = readRDS(file_name_input)
+res = readRDS(file_name_output)
+```
+
+
+### PET & precipitation
+
+```{r eval = params$model=="spwb", fig.height=6, fig.width=8}
+type <- "PET_Precipitation"
+p <-plot(res, type= type)
+if(params$save_plots) ggplot2::ggsave(filename = file.path(out_plots, paste0(type, ".png")), plot = p)
+p
+```
+
+
+
+### Evapotranspiration
+```{r eval = params$model=="spwb", fig.height=6, fig.width=8}
+type <- "Evapotranspiration"
+p <-plot(res, type= type)
+if(params$save_plots) ggplot2::ggsave(filename = file.path(out_plots, paste0(type, ".png")),
+                plot = p)
+p
+```
+
+### Soil moisture content
+```{r eval = params$model=="spwb", fig.height=6, fig.width=8}
+type <- "SoilTheta"
+p <-plot(res, type= type)
+if(params$save_plots) ggplot2::ggsave(filename = file.path(out_plots, paste0(type, ".png")),
+                plot = p)
+p
+```
+
+### Plant LAI
+```{r eval = params$model=="spwb", fig.height=6, fig.width=8}
+type <- "PlantLAI"
+p <-plot(res, type= type, bySpecies = TRUE)
+if(params$save_plots) ggplot2::ggsave(filename = file.path(out_plots, paste0(type, ".png")),
+                plot = p)
+p
+```
+
+
+### Transpiration per leaf
+```{r eval = params$model=="spwb", fig.height=6, fig.width=8}
+type <- "TranspirationPerLeaf"
+p <-plot(res, type= type, bySpecies = TRUE)
+if(params$save_plots) ggplot2::ggsave(filename = file.path(out_plots, paste0(type, ".png")),
+                plot = p)
+p
+```
+
+### Gross photosynthesis per leaf
+```{r eval = params$model=="spwb", fig.height=6, fig.width=8}
+type <- "GrossPhotosynthesisPerLeaf"
+p <-plot(res, type= type, bySpecies = TRUE)
+if(params$save_plots) ggplot2::ggsave(filename = file.path(out_plots, paste0(type, ".png")),
+                plot = p)
+p
+```
+
+### Plant stress
+```{r eval = params$model=="spwb", fig.height=6, fig.width=8}
+type <- "PlantStress"
+p <-plot(res, type= type, bySpecies = TRUE)
+if(params$save_plots) ggplot2::ggsave(filename = file.path(out_plots, paste0(type, ".png")),
+                plot = p)
+p
+```
+
+### Stem PLC
+```{r eval = params$model=="spwb", fig.height=6, fig.width=8}
+type <- "StemPLC"
+p <-plot(res, type= type, bySpecies = TRUE)
+if(params$save_plots) ggplot2::ggsave(filename = file.path(out_plots, paste0(type, ".png")),
+                plot = p)
+p
+```

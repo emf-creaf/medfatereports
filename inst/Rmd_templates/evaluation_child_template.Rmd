@@ -1,0 +1,134 @@
+
+```{r message=FALSE, warning=FALSE}
+out_path <- file.path('Output', packageVersion('medfate')[[1]], params$model, params$conf, params$code)
+if(params$save_plots) {
+  out_evalplots <- file.path(out_path, 'EvaluationPlots')
+  if (!dir.exists(out_evalplots)) {
+    dir.create(out_evalplots, recursive = TRUE)
+  }
+}
+
+eval_REW <- "SWC" %in% names(site_data$measuredData)
+```
+
+
+```{r}
+file_name_input <- file.path(out_path,
+                       paste0('simulation_input.rds'))
+file_name_output <- file.path(out_path,
+                       paste0('simulation_result.rds'))
+input_object = readRDS(file_name_input)
+control = input_object$control
+res = readRDS(file_name_output)
+```
+
+
+### Soil moisture
+```{r eval = eval_REW}
+medfate::evaluation_stats(res, site_data$measuredData, type="REW")
+```
+
+
+```{r eval = eval_REW, fig.height=6, fig.width=8}
+p<-medfate::evaluation_plot(res, site_data$measuredData, type="REW")
+if(params$save_plots) ggplot2::ggsave(filename = file.path(out_evalplots, paste0("REW_dynamics.png")),
+                plot = p)
+p
+```
+
+```{r eval = eval_REW, fig.height=6, fig.width=8}
+p<-medfate::evaluation_plot(res, site_data$measuredData, type="REW", plotType = "scatter")
+if(params$save_plots) ggplot2::ggsave(filename = file.path(out_evalplots, paste0("REW_scatter.png")),
+                plot = p)
+p
+```
+
+### Plant transpiration
+
+```{r}
+cohNames <- row.names(input_object$cohorts)
+df<-NULL
+cohNamesOut <- character()
+for(i in 1:length(cohNames)) {
+  measured_var <- paste0("E_", cohNames[i])
+  if(measured_var %in% names(site_data$measuredData)) {
+      v<-medfate::evaluation_stats(res, site_data$measuredData, type= "E", cohort = cohNames[i])
+      if(is.null(df)) df <- v
+      else df <- cbind(df, v)
+      cohNamesOut <-c(cohNamesOut, cohNames[i])
+  }
+}
+if(!is.null(df)) {
+  df <- as.data.frame(t(df), row.names = cohNamesOut)
+  print(df)
+}
+```
+
+```{r fig.keep='all'}
+for(i in 1:length(cohNames)) {
+  measured_var <- paste0("E_", cohNames[i])
+  if(measured_var %in% names(site_data$measuredData)) {
+    if(sum(is.na(site_data$measuredData[[measured_var]]))< nrow(site_data$measuredData)) {
+      p<-medfate::evaluation_plot(res, site_data$measuredData, 
+                                cohort = cohNames[i],
+                                type="E", plotType = "dynamics")
+      if(params$save_plots) ggplot2::ggsave(filename = file.path(out_evalplots,
+                                         paste0(measured_var,"_dynamics.png")),
+                    plot = p)
+      print(p)
+      p<-medfate::evaluation_plot(res, site_data$measuredData, 
+                                cohort = cohNames[i],
+                                type="E", plotType = "scatter")
+      if(params$save_plots) ggplot2::ggsave(filename = file.path(out_evalplots,
+                                         paste0(measured_var,"_scatter.png")),
+                    plot = p)
+      print(p)
+    }
+  }
+}
+```
+
+`r if(control$transpirationMode =="Sperry") print("### Leaf water potentials")`
+
+```{r eval=(control$transpirationMode =="Sperry")}
+cohNames <- row.names(input_object$cohorts)
+df<-NULL
+cohNamesOut <- character()
+for(i in 1:length(cohNames)) {
+  measured_var <- paste0("MD_", cohNames[i])
+  if(measured_var %in% names(site_data$measuredData)) {
+      v<-medfate::evaluation_stats(res, site_data$measuredData, type= "WP", cohort = cohNames[i])
+      if(is.null(df)) df <- v
+      else df <- rbind(df, v)
+      cohNamesOut <-c(cohNamesOut, cohNames[i])
+  }
+}
+if(!is.null(df)) {
+  print(df)
+}
+```
+
+```{r fig.keep='all', eval=(control$transpirationMode =="Sperry")}
+for(i in 1:length(cohNames)) {
+  measured_out <- paste0("WP_", cohNames[i])
+  measured_var <- paste0("MD_", cohNames[i])
+  if(measured_var %in% names(site_data$measuredData)) {
+    if(sum(is.na(site_data$measuredData[[measured_var]]))< nrow(site_data$measuredData)) {
+      p<-medfate::evaluation_plot(res, site_data$measuredData, 
+                                cohort = cohNames[i],
+                                type="WP", plotType = "dynamics")
+      if(params$save_plots) ggplot2::ggsave(filename = file.path(out_evalplots,
+                                         paste0(measured_var,"_dynamics.png")),
+                    plot = p)
+      print(p)
+      p<-medfate::evaluation_plot(res, site_data$measuredData, 
+                                cohort = cohNames[i],
+                                type="WP", plotType = "scatter")
+      if(params$save_plots) ggplot2::ggsave(filename = file.path(out_evalplots,
+                                         paste0(measured_out,"_scatter.png")),
+                    plot = p)
+      print(p)
+    }
+  }
+}
+```

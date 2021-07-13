@@ -1,0 +1,127 @@
+---
+title: "Run & Evaluation report for `r params$code`/`r params$model`/`r params$conf`"
+author: "Victor Granda / Miquel De Cáceres"
+date: "`r Sys.time()`"
+params:
+  wd: '/home/miquel/OneDrive/Professional/Recerca/MedfateValidation/'
+  code: 'FRAPUE'
+  model: 'spwb'
+  conf: 'basic'
+  save_plots: true
+output:
+  html_document:
+    df_print: paged
+    toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(error = TRUE)
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_knit$set(root.dir = params$wd)
+
+library(medfate)
+library(medfatereports)
+library(dplyr)
+library(ggplot2)
+```
+
+```{r data, message=FALSE, warning=FALSE}
+
+control <- yaml::yaml.load_file(system.file("yaml_configurations", paste0(params$conf, ".yaml"),
+                                          package = "medfatereports"))
+
+out_path <- file.path('Output', packageVersion('medfate')[[1]], params$model, params$conf, params$code)
+
+site_data <- load_list(params$code)
+```
+
+# General Info
+
+```{r gen_info}
+data.frame(
+    Pkg_version  = as.character(packageVersion('medfate')),
+    Site = params$code,
+    Model = params$model,
+    Configuration = params$conf,
+    Date = format(Sys.Date())
+  )
+```
+
+## Remarks
+
+```{r remarks, max.print=10}
+site_data$remarks
+```
+
+
+# Run Model
+
+```{r simple_model, message=FALSE}
+soil_object <- soil(site_data$soilData, VG_PTF = "Toth")
+
+if(params$model=="spwb") {
+  input_object <- medfate::forest2spwbInput(site_data$forest_object1, 
+                                            soil_object, 
+                                            site_data$sp_params, 
+                                            control)
+  input_object <- modifyCohortParams(input_object, site_data$customParams)
+  res <- spwb(input_object,
+              site_data$meteoData, 
+              latitude = site_data$terrainData$latitude, 
+              elevation = site_data$terrainData$elevation, 
+              slope = site_data$terrainData$slope, 
+              aspect = site_data$terrainData$aspect)
+} else if(params$model=="growth") {
+  input_object <- medfate::forest2growthInput(site_data$forest_object1, 
+                                            soil_object, 
+                                            site_data$sp_params, 
+                                            control)
+  input_object <- modifyCohortParams(input_object, site_data$customParams)
+  res <- growth(input_object,
+              site_data$meteoData, 
+              latitude = site_data$terrainData$latitude, 
+              elevation = site_data$terrainData$elevation, 
+              slope = site_data$terrainData$slope, 
+              aspect = site_data$terrainData$aspect)
+}
+```
+
+
+```{r}
+file_name_input <- file.path(out_path,
+                       paste0('simulation_input.rds'))
+file_name_output <- file.path(out_path,
+                       paste0('simulation_result.rds'))
+
+saveRDS(input_object, file = file_name_input)
+paste0("Model input file '", file_name_input, "' written.")
+saveRDS(res, file = file_name_output)
+paste0("Model output file '", file_name_output, "' written.")
+```
+
+# Output plots
+```{r child = "drawoutput_child_template.Rmd"}
+```
+
+# Evaluation
+
+```{r child = "evaluation_child_template.Rmd"}
+```
+
+
+# Input object
+
+```{r input, collapse=FALSE}
+  print(input_object)
+```
+
+
+# Session Info
+
+```{r session_info}
+# printing session info
+devtools::session_info()
+```
+

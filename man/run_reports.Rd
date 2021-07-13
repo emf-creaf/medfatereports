@@ -4,7 +4,7 @@
 \alias{run_reports}
 \title{Main function to run reports}
 \usage{
-run_reports(type = "evaluation", sites, model, confs, wd)
+run_reports(type = "evaluation", sites, model, confs, wd, save_plots = TRUE)
 }
 \arguments{
 \item{type}{which kind of report must be generated, "evaluation"}
