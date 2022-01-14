@@ -19,7 +19,6 @@ knitr::opts_chunk$set(echo = FALSE)
 knitr::opts_chunk$set(error = TRUE)
 knitr::opts_chunk$set(message = FALSE)
 knitr::opts_chunk$set(warning = FALSE)
-knitr::opts_knit$set(root.dir = params$wd)
 
 library(medfate)
 library(medfatereports)
@@ -32,7 +31,7 @@ library(ggplot2)
 control <- yaml::yaml.load_file(system.file("yaml_configurations", paste0(params$conf, ".yaml"),
                                           package = "medfatereports"))
 
-out_path <- file.path('Output', packageVersion('medfate')[[1]], params$model, params$conf, params$code)
+out_path <- file.path(params$wd, 'Output', packageVersion('medfate')[[1]], params$model, params$conf, params$code)
 
 site_data <- load_list(params$code)
 ```
@@ -100,6 +99,7 @@ paste0("Model input file '", file_name_input, "' written.")
 saveRDS(res, file = file_name_output)
 paste0("Model output file '", file_name_output, "' written.")
 ```
+
 
 # Output plots
 ```{r child = "drawoutput_child_template.Rmd"}

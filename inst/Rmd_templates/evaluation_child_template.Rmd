@@ -1,6 +1,5 @@
 
 ```{r message=FALSE, warning=FALSE}
-out_path <- file.path('Output', packageVersion('medfate')[[1]], params$model, params$conf, params$code)
 if(params$save_plots) {
   out_evalplots <- file.path(out_path, 'EvaluationPlots')
   if (!dir.exists(out_evalplots)) {
