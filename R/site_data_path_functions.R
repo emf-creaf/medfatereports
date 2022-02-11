@@ -1,6 +1,6 @@
 pkg.globals <- new.env()
 
-pkg.globals$site_data_path <- "/home/miquel/OneDrive/Professional/MedfateWorks/MedfateValidation/"
+pkg.globals$site_data_path <- "/home/miquel/OneDrive/Professional/MedfateWorks/StandLevelEvaluation/"
 
 #' Site data path
 #'
