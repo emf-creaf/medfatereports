@@ -28,8 +28,12 @@ library(ggplot2)
 
 ```{r data, message=FALSE, warning=FALSE}
 
-control <- yaml::yaml.load_file(system.file("yaml_configurations", paste0(params$conf, ".yaml"),
+control <- medfate::defaultControl()
+control_mod <- yaml::yaml.load_file(system.file("yaml_configurations", paste0(params$conf, ".yaml"),
                                           package = "medfatereports"))
+for(i in 1:length(control_mod)) {
+  control[[names(control_mod)[i]]] <- control_mod[[i]]
+}
 
 out_path <- file.path(params$wd, 'Output', packageVersion('medfate')[[1]], params$model, params$conf, params$code)
 
