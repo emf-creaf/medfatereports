@@ -50,29 +50,29 @@ This functions search and load the data for the corresponding site
 }
 \section{Functions}{
 \itemize{
-\item \code{load_treeData}: 
+\item \code{load_treeData()}: 
 
-\item \code{load_shrubData}: 
+\item \code{load_shrubData()}: 
 
-\item \code{load_seedData}: 
+\item \code{load_seedData()}: 
 
-\item \code{load_miscData}: 
+\item \code{load_miscData()}: 
 
-\item \code{load_meteoData}: 
+\item \code{load_meteoData()}: 
 
-\item \code{load_soilData}: 
+\item \code{load_soilData()}: 
 
-\item \code{load_soilDataUnilayer}: 
+\item \code{load_soilDataUnilayer()}: 
 
-\item \code{load_measuredData}: 
+\item \code{load_measuredData()}: 
 
-\item \code{load_terrainData}: 
+\item \code{load_terrainData()}: 
 
-\item \code{load_customParams}: 
+\item \code{load_customParams()}: 
 
-\item \code{load_remarks}: 
+\item \code{load_remarks()}: 
 
-\item \code{load_list}: 
+\item \code{load_list()}: 
+
 }}
-
 \concept{Load}

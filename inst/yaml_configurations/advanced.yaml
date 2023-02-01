@@ -3,5 +3,4 @@ soilFunctions: VG
 cavitationRefill: rate
 ndailysteps: 24.0
 nsubsteps: 3600.0
-capacitance: yes
 multiLayerBalance: no
