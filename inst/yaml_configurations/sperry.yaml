@@ -1,6 +1,7 @@
 transpirationMode: Sperry
 soilFunctions: VG
-cavitationRefill: rate
+cavitationRefillStem: rate
+cavitationRefillLeaves: total
 ndailysteps: 24.0
 nsubsteps: 3600.0
 multiLayerBalance: no
