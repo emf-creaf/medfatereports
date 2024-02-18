@@ -35,7 +35,6 @@ buildForest <- function(treeData = NULL, shrubData = NULL,
   # adding misc data
   if (!is.null(miscData)) {
     empty_forest$ID <- miscData$ID
-    empty_forest$patchsize <- miscData$patchsize
     empty_forest$herbCover <- miscData$herbCover
     empty_forest$herbHeight <- miscData$herbHeight
   }

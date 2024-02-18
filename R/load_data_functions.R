@@ -119,29 +119,12 @@ load_soilData <- function(site) {
 #'
 #' @export
 
-load_soilDataUnilayer <- function(site) {
-  # file route
-  location <- file.path(pkg.globals$site_data_path,'Sites_data', site, paste0(site, '_soilDataUnilayer.txt'))
-  # load data
-  soil_data <- read.table(location, header = TRUE, sep = '\t', dec = '.',
-                          stringsAsFactors = FALSE)
-  # return data frame
-  return(soil_data)
-}
-
-#' @describeIn load_forest
-#'
-#' @export
-
 load_measuredData <- function(site) {
   # file route
   location <- file.path(pkg.globals$site_data_path,'Sites_data', site, paste0(site, '_measuredData.txt'))
   # load data
   measured_data <- read.table(location, header = TRUE, sep = '\t', dec = '.',
                               stringsAsFactors = FALSE)
-  # rownames
-  rownames(measured_data) <- measured_data[['Date']]
-
   # return data frame
   return(measured_data)
 }
@@ -232,7 +215,7 @@ load_list<-function(code, includeTrees = TRUE, includeShrubs = TRUE) {
   l$soilData <- load_soilData(code)
   l$terrainData <- load_terrainData(code)
   l$remarks <- load_remarks(code)
-  l$sp_params <- modifySpParams(SpParamsMED, l$customParams)
+  l$sp_params <- medfate::modifySpParams(SpParamsMED, l$customParams)
   l$forest_object1 <- buildForest(l$treeData, l$shrubData, l$seedData, l$miscData)
   return(l)
 }

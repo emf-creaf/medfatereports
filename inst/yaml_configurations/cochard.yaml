@@ -2,8 +2,5 @@ transpirationMode: Cochard
 soilFunctions: VG
 cavitationRefillStem: rate
 cavitationRefillLeaves: total
-equalLeafStemVC: true
-rhizosphereOverlap: partial
-ndailysteps: 24.0
-nsubsteps: 3600.0
-multiLayerBalance: false
+segmentedXylemVulnerability: true
+rhizosphereOverlap: total

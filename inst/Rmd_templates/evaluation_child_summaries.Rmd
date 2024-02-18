@@ -1,38 +1,49 @@
 
 ```{r message=FALSE, warning=FALSE}
-out_paths = rep("", length(codes))
-input_objects = vector("list", length(codes))
-res = vector("list", length(codes))
-site_data = vector("list", length(codes))
-for(i in 1:length(codes)) {
-   out_paths[i] <- file.path('Output', packageVersion('medfate')[[1]], params$model, params$conf, codes[i])
-   file_name_input <- file.path(out_paths[i],
+n_sites <- length(params$codes)
+n_confs <- length(params$confs)
+n_rows <- n_sites*n_confs
+df <- data.frame(Site = rep(NA, n_rows), 
+                 Mode = rep(NA, n_rows),
+                 Path = rep(NA, n_rows))
+df$SiteData = vector("list", n_rows)
+df$InputObject = vector("list", n_rows)
+df$Result = vector("list", n_rows)
+cnt <- 0
+for(i in 1:n_sites) {
+  site <- params$codes[i]
+  for(j in 1:n_confs) {
+    conf <- params$confs[j]
+    cnt <- cnt+1
+    df$Site[cnt] <- site
+    df$Mode[cnt] <- conf
+    df$Path[cnt] <- file.path('Output', packageVersion('medfate')[[1]], params$model, conf, site)
+    file_name_input <- file.path(df$Path[cnt],
                        paste0('simulation_input.rds'))
-   file_name_output <- file.path(out_paths[i],
+    file_name_output <- file.path(df$Path[cnt],
                        paste0('simulation_result.rds'))
-   input_objects[[i]] = readRDS(file_name_input)
-   res[[i]] = readRDS(file_name_output)
-   site_data[[i]] <- medfatereports::load_list(codes[i])
+    df$InputObject[[cnt]] = readRDS(file_name_input)
+    df$Result[[cnt]] = readRDS(file_name_output)
+    df$SiteData[[cnt]] <- medfatereports::load_list(site)
+  }
 }
 ```
 
-
 ## Soil moisture
 ```{r}
-df<-NULL
-codesOut <- character()
-for(i in 1:length(codes)) {
-  eval_REW <- "SWC" %in% names(site_data[[i]]$measuredData)
+df_eval <-NULL
+for(i in 1:n_rows) {
+  eval_REW <- "SWC" %in% names(df$SiteData[[i]]$measuredData)
   if(eval_REW) {
-    v<-medfate::evaluation_stats(res[[i]], site_data[[i]]$measuredData, type= "REW")
-    if(is.null(df)) df <- v
-    else df <- cbind(df, v)
-    codesOut <-c(codesOut, codes[i])
+    v<-medfate::evaluation_stats(df$Result[[i]], df$SiteData[[i]]$measuredData, type= "REW")
+    if(is.null(df)) df_eval <- v
+    else df_eval <- cbind(df_eval, v)
   }
 }
 if(!is.null(df)) {
-  df <- as.data.frame(t(df), row.names = codesOut)
-  knitr::kable(df)
+  df_all <- cbind(df[,c("Site", "Mode")], as.data.frame(t(df_eval)))
+  row.names(df_all)<- NULL
+  knitr::kable(df_all)
 }
 ```
 
@@ -48,7 +59,7 @@ for(i in 1:length(codes)) {
   for(j in 1:length(cohNames)) {
     measured_var <- paste0("E_", cohNames[j])
     if(measured_var %in% names(site_data[[i]]$measuredData)) {
-      v<-medfate::evaluation_stats(res[[i]], site_data[[i]]$measuredData, 
+      v<-medfate::evaluation_stats(res[[i]], site_data[[i]]$measuredData,
                                    type= "E", cohort = cohNames[j])
       if(is.null(df)) df <- v
       else df <- cbind(df, v)
@@ -77,7 +88,7 @@ for(i in 1:length(codes)) {
     for(j in 1:length(cohNames)) {
       measured_var <- paste0("MD_", cohNames[j])
       if(measured_var %in% names(site_data[[i]]$measuredData)) {
-        v<-medfate::evaluation_stats(res[[i]], site_data[[i]]$measuredData, 
+        v<-medfate::evaluation_stats(res[[i]], site_data[[i]]$measuredData,
                                    type= "WP", cohort = cohNames[j])
         if(is.null(df)) df <- v
         else df <- rbind(df, v)

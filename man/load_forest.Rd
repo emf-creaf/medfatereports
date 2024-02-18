@@ -8,7 +8,6 @@
 \alias{load_miscData}
 \alias{load_meteoData}
 \alias{load_soilData}
-\alias{load_soilDataUnilayer}
 \alias{load_measuredData}
 \alias{load_terrainData}
 \alias{load_customParams}
@@ -29,8 +28,6 @@ load_miscData(site)
 load_meteoData(site)
 
 load_soilData(site)
-
-load_soilDataUnilayer(site)
 
 load_measuredData(site)
 
@@ -61,8 +58,6 @@ This functions search and load the data for the corresponding site
 \item \code{load_meteoData()}: 
 
 \item \code{load_soilData()}: 
-
-\item \code{load_soilDataUnilayer()}: 
 
 \item \code{load_measuredData()}: 
 

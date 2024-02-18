@@ -1,1 +1,5 @@
 transpirationMode: Granier
+soilFunctions: VG
+cavitationRefillStem: rate
+cavitationRefillLeaves: total
+rhizosphereOverlap: total

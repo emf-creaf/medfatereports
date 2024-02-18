@@ -17,9 +17,9 @@ file_name_input <- file.path(out_path,
                        paste0('simulation_input.rds'))
 file_name_output <- file.path(out_path,
                        paste0('simulation_result.rds'))
-input_object = readRDS(file_name_input)
-control = input_object$control
-res = readRDS(file_name_output)
+input_object <- readRDS(file_name_input)
+control <- input_object$control
+res <- readRDS(file_name_output)
 ```
 
 
@@ -29,14 +29,14 @@ knitr::kable(as.data.frame(t(medfate::evaluation_stats(res, site_data$measuredDa
 ```
 
 
-```{r eval = eval_REW, fig.height=6, fig.width=8}
+```{r eval = eval_REW, fig.height=5, fig.width=8}
 p<-medfate::evaluation_plot(res, site_data$measuredData, type="REW")
 if(params$save_plots) ggplot2::ggsave(filename = file.path(out_evalplots, paste0("REW_dynamics.png")),
                 plot = p)
 p
 ```
 
-```{r eval = eval_REW, fig.height=6, fig.width=8}
+```{r eval = eval_REW, fig.height=5, fig.width=8}
 p<-medfate::evaluation_plot(res, site_data$measuredData, type="REW", plotType = "scatter")
 if(params$save_plots) ggplot2::ggsave(filename = file.path(out_evalplots, paste0("REW_scatter.png")),
                 plot = p)
@@ -64,7 +64,7 @@ if(!is.null(df)) {
 }
 ```
 
-```{r fig.keep='all'}
+```{r fig.keep='all', fig.height=5, fig.width=8}
 for(i in 1:length(cohNames)) {
   measured_var <- paste0("E_", cohNames[i])
   if(measured_var %in% names(site_data$measuredData)) {
@@ -88,9 +88,9 @@ for(i in 1:length(cohNames)) {
 }
 ```
 
-### Leaf water potentials
+### Leaf water potential
 
-```{r eval=(control$transpirationMode =="Sperry")}
+```{r eval=(control$transpirationMode =="Granier")}
 cohNames <- row.names(input_object$cohorts)
 df<-NULL
 wpNamesOut <- character()
@@ -113,7 +113,7 @@ if(!is.null(df)) {
 }
 ```
 
-```{r fig.keep='all', eval=(control$transpirationMode =="Sperry")}
+```{r fig.keep='all', eval=(control$transpirationMode !="Granier"), fig.height=5, fig.width=8}
 for(i in 1:length(cohNames)) {
   measured_out <- paste0("WP_", cohNames[i])
   measured_var <- paste0("MD_", cohNames[i])

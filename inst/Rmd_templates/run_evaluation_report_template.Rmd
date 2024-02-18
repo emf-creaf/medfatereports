@@ -52,6 +52,17 @@ data.frame(
   )
 ```
 
+## Custom control
+
+```{r control, max.print=10}
+as.data.frame(control_mod)
+```
+
+## Custom species parameters
+```{r customParams, max.print=10}
+as.data.frame(site_data$customParams)
+```
+
 ## Remarks
 
 ```{r remarks, max.print=10}
@@ -69,7 +80,7 @@ if(params$model=="spwb") {
                                             soil_object, 
                                             site_data$sp_params, 
                                             control)
-  input_object <- modifyCohortParams(input_object, site_data$customParams)
+  # input_object <- modifyCohortParams(input_object, site_data$customParams)
   res <- spwb(input_object,
               site_data$meteoData, 
               latitude = site_data$terrainData$latitude, 
@@ -81,7 +92,7 @@ if(params$model=="spwb") {
                                             soil_object, 
                                             site_data$sp_params, 
                                             control)
-  input_object <- modifyCohortParams(input_object, site_data$customParams)
+  # input_object <- modifyCohortParams(input_object, site_data$customParams)
   res <- growth(input_object,
               site_data$meteoData, 
               latitude = site_data$terrainData$latitude, 

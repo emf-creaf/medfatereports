@@ -21,7 +21,7 @@ res = readRDS(file_name_output)
 
 ### PET & precipitation
 
-```{r eval = params$model=="spwb", fig.height=6, fig.width=8}
+```{r eval = params$model=="spwb", fig.height=5, fig.width=8}
 type <- "PET_Precipitation"
 p <-plot(res, type= type)
 if(params$save_plots) ggplot2::ggsave(filename = file.path(out_plots, paste0(type, ".png")), plot = p)
@@ -29,9 +29,8 @@ p
 ```
 
 
-
 ### Evapotranspiration
-```{r eval = params$model=="spwb", fig.height=6, fig.width=8}
+```{r eval = params$model=="spwb", fig.height=5, fig.width=8}
 type <- "Evapotranspiration"
 p <-plot(res, type= type)
 if(params$save_plots) ggplot2::ggsave(filename = file.path(out_plots, paste0(type, ".png")),
@@ -39,9 +38,9 @@ if(params$save_plots) ggplot2::ggsave(filename = file.path(out_plots, paste0(typ
 p
 ```
 
-### Soil moisture content
-```{r eval = params$model=="spwb", fig.height=6, fig.width=8}
-type <- "SoilTheta"
+### Soil water potential
+```{r eval = params$model=="spwb", fig.height=5, fig.width=8}
+type <- "SoilPsi"
 p <-plot(res, type= type)
 if(params$save_plots) ggplot2::ggsave(filename = file.path(out_plots, paste0(type, ".png")),
                 plot = p)
@@ -49,7 +48,7 @@ p
 ```
 
 ### Plant LAI
-```{r eval = params$model=="spwb", fig.height=6, fig.width=8}
+```{r eval = params$model=="spwb", fig.height=5, fig.width=8}
 type <- "PlantLAI"
 p <-plot(res, type= type, bySpecies = TRUE)
 if(params$save_plots) ggplot2::ggsave(filename = file.path(out_plots, paste0(type, ".png")),
@@ -59,7 +58,7 @@ p
 
 
 ### Transpiration per leaf
-```{r eval = params$model=="spwb", fig.height=6, fig.width=8}
+```{r eval = params$model=="spwb", fig.height=5, fig.width=8}
 type <- "TranspirationPerLeaf"
 p <-plot(res, type= type, bySpecies = TRUE)
 if(params$save_plots) ggplot2::ggsave(filename = file.path(out_plots, paste0(type, ".png")),
@@ -67,29 +66,37 @@ if(params$save_plots) ggplot2::ggsave(filename = file.path(out_plots, paste0(typ
 p
 ```
 
-### Gross photosynthesis per leaf
-```{r eval = params$model=="spwb", fig.height=6, fig.width=8}
-type <- "GrossPhotosynthesisPerLeaf"
-p <-plot(res, type= type, bySpecies = TRUE)
-if(params$save_plots) ggplot2::ggsave(filename = file.path(out_plots, paste0(type, ".png")),
-                plot = p)
-p
-```
-
-### Plant stress
-```{r eval = params$model=="spwb", fig.height=6, fig.width=8}
-type <- "PlantStress"
-p <-plot(res, type= type, bySpecies = TRUE)
-if(params$save_plots) ggplot2::ggsave(filename = file.path(out_plots, paste0(type, ".png")),
-                plot = p)
-p
-```
 
 ### Stem PLC
-```{r eval = params$model=="spwb", fig.height=6, fig.width=8}
+```{r eval = params$model=="spwb", fig.height=5, fig.width=8}
 type <- "StemPLC"
 p <-plot(res, type= type, bySpecies = TRUE)
 if(params$save_plots) ggplot2::ggsave(filename = file.path(out_plots, paste0(type, ".png")),
                 plot = p)
+p
+```
+
+### Leaf PLC
+```{r eval = params$model=="spwb", fig.height=5, fig.width=8}
+type <- "LeafPLC"
+p <-plot(res, type= type, bySpecies = TRUE)
+if(params$save_plots) ggplot2::ggsave(filename = file.path(out_plots, paste0(type, ".png")),
+                plot = p)
+p
+```
+
+### Plant/leaf water potential
+```{r eval = params$model=="spwb", fig.height=5, fig.width=8}
+if(params$conf=="granier") {
+  type = "PlantPsi"
+  p <-plot(res, type= type, bySpecies = TRUE)
+  if(params$save_plots) ggplot2::ggsave(filename = file.path(out_plots, paste0(type, ".png")),
+                plot = p)
+} else {
+  type = "LeafPsiRange"
+  p <-plot(res, type= type, bySpecies = TRUE)
+  if(params$save_plots) ggplot2::ggsave(filename = file.path(out_plots, paste0(type, ".png")),
+                plot = p)
+}
 p
 ```
