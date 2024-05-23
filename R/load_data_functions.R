@@ -14,6 +14,20 @@ load_forest<-function(site) {
   seedData <- load_seedData(site)
   return(buildForest(treeData, shrubData, seedData, miscData))
 }
+
+#' @describeIn load_forest
+#'
+#' @export
+load_siteData <- function(site) {
+  # file route
+  location <- file.path(get_data_path(),'Sites_data', site, paste0(site, '_siteData.txt'))
+  # load data
+  site_data <- read.table(location, header = TRUE, sep = '\t', dec = '.',
+                          stringsAsFactors = FALSE)
+  # return data frame
+  return(site_data)
+}
+
 #' @describeIn load_forest
 #'
 #' @export
@@ -176,6 +190,23 @@ load_customParams <- function(site) {
 #'
 #' @export
 
+load_customControl <- function(site) {
+  # file route
+  location <- file.path(pkg.globals$site_data_path,'Sites_data', site, paste0(site, '_customControl.txt'))
+  if (!file.exists(location)) {
+    return(NULL)
+  }
+  # load data
+  custom_control <- read.table(location, header = TRUE, sep = '\t', dec = '.',
+                          stringsAsFactors = FALSE)
+  # return data frame
+  return(custom_control)
+}
+
+#' @describeIn load_forest
+#'
+#' @export
+
 load_remarks <- function(site) {
   # file route
   location <- file.path(pkg.globals$site_data_path,'Sites_data', site, paste0(site, '_remarks.txt'))
@@ -197,8 +228,8 @@ load_remarks <- function(site) {
 #'
 #' @export
 load_list<-function(code, includeTrees = TRUE, includeShrubs = TRUE) {
-  data(SpParamsMED, envir = environment())
   l = list()
+  l$siteData <- load_siteData(code)
   l$treeData <- load_treeData(code)
   if(!includeTrees) {
     l$treeData = l$treeData[numeric(0),]
@@ -209,13 +240,17 @@ load_list<-function(code, includeTrees = TRUE, includeShrubs = TRUE) {
   }
   l$seedData <- load_seedData(code)
   l$customParams <- load_customParams(code)
+  l$customControl <- load_customControl(code)
   l$measuredData <- load_measuredData(code)
   l$meteoData <- load_meteoData(code)
   l$miscData <- load_miscData(code)
   l$soilData <- load_soilData(code)
   l$terrainData <- load_terrainData(code)
   l$remarks <- load_remarks(code)
-  l$sp_params <- medfate::modifySpParams(SpParamsMED, l$customParams)
+  SpParamsName <- "SpParamsMED"
+  if("SpParamsName" %in% names(l$miscData)) SpParamsName = l$miscData$SpParamsName
+  SpParams <- get(SpParamsName, envir = environment())
+  l$sp_params <- medfate::modifySpParams(SpParams, l$customParams, subsetSpecies = FALSE)
   l$forest_object1 <- buildForest(l$treeData, l$shrubData, l$seedData, l$miscData)
   return(l)
 }

@@ -22,8 +22,28 @@ control <- input_object$control
 res <- readRDS(file_name_output)
 ```
 
+### Soil moisture content
+```{r eval = eval_REW}
+knitr::kable(as.data.frame(t(medfate::evaluation_stats(res, site_data$measuredData, type="SWC"))))
+```
 
-### Soil moisture
+
+```{r eval = eval_REW, fig.height=5, fig.width=8}
+p<-medfate::evaluation_plot(res, site_data$measuredData, type="SWC")
+if(params$save_plots) ggplot2::ggsave(filename = file.path(out_evalplots, paste0("SWC_dynamics.png")),
+                plot = p)
+p
+```
+
+```{r eval = eval_REW, fig.height=5, fig.width=8}
+p<-medfate::evaluation_plot(res, site_data$measuredData, type="SWC", plotType = "scatter")
+if(params$save_plots) ggplot2::ggsave(filename = file.path(out_evalplots, paste0("SWC_scatter.png")),
+                plot = p)
+p
+```
+
+
+### Soil moisture (relative)
 ```{r eval = eval_REW}
 knitr::kable(as.data.frame(t(medfate::evaluation_stats(res, site_data$measuredData, type="REW"))))
 ```

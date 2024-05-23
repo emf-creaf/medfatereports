@@ -1,0 +1,5 @@
+transpirationMode: Sureau
+stemCavitationRecovery: rate
+leafCavitationRecovery: rate
+segmentedXylemVulnerability: false
+subdailyResults: false

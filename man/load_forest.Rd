@@ -2,6 +2,7 @@
 % Please edit documentation in R/load_data_functions.R
 \name{load_forest}
 \alias{load_forest}
+\alias{load_siteData}
 \alias{load_treeData}
 \alias{load_shrubData}
 \alias{load_seedData}
@@ -11,11 +12,14 @@
 \alias{load_measuredData}
 \alias{load_terrainData}
 \alias{load_customParams}
+\alias{load_customControl}
 \alias{load_remarks}
 \alias{load_list}
 \title{Loading data functions}
 \usage{
 load_forest(site)
+
+load_siteData(site)
 
 load_treeData(site)
 
@@ -35,6 +39,8 @@ load_terrainData(site)
 
 load_customParams(site)
 
+load_customControl(site)
+
 load_remarks(site)
 
 load_list(code, includeTrees = TRUE, includeShrubs = TRUE)
@@ -47,6 +53,8 @@ This functions search and load the data for the corresponding site
 }
 \section{Functions}{
 \itemize{
+\item \code{load_siteData()}: 
+
 \item \code{load_treeData()}: 
 
 \item \code{load_shrubData()}: 
@@ -64,6 +72,8 @@ This functions search and load the data for the corresponding site
 \item \code{load_terrainData()}: 
 
 \item \code{load_customParams()}: 
+
+\item \code{load_customControl()}: 
 
 \item \code{load_remarks()}: 
 

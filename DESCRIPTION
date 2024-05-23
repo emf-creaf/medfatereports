@@ -5,7 +5,7 @@ Authors@R: c(
     person("Miquel", "De Cáceres", email = "miquelcaceres@gmail.com", role = "cre"),
     person("Víctor", "Granda", email = "victorgrandagarcia@gmail.com", role = "aut"))
 Description: Package for automated medfate model running and evaluation
-Depends: R (>= 3.4.1)
+Depends: R (>= 3.4.1), medfate, medfateutils
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true

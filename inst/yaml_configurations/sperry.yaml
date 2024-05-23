@@ -1,6 +1,5 @@
 transpirationMode: Sperry
-soilFunctions: VG
-cavitationRefillStem: rate
-cavitationRefillLeaves: total
+stemCavitationRecovery: rate
+leafCavitationRecovery: total
 segmentedXylemVulnerability: true
-rhizosphereOverlap: total
+subdailyResults: false

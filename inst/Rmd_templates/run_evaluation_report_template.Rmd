@@ -52,21 +52,36 @@ data.frame(
   )
 ```
 
-## Custom control
+## Configuration control
 
 ```{r control, max.print=10}
 as.data.frame(control_mod)
 ```
+
+## Custom cotrol
+
+```{r customControl, max.print=10}
+site_data$customControl
+```
+
+
 
 ## Custom species parameters
 ```{r customParams, max.print=10}
 as.data.frame(site_data$customParams)
 ```
 
+
 ## Remarks
 
 ```{r remarks, max.print=10}
 site_data$remarks
+```
+
+## Miscellanea
+
+```{r miscellanea, max.print=10}
+site_data$miscData
 ```
 
 
@@ -75,30 +90,44 @@ site_data$remarks
 ```{r simple_model, message=FALSE}
 soil_object <- soil(site_data$soilData, VG_PTF = "Toth")
 
+local_control <- control
+if(!is.null(site_data$customControl)) {
+  for(i in 1:length(site_data$customControl)) {
+    local_control[[names(site_data$customControl)[i]]] <- site_data$customControl[[i]]
+  }
+}
+
+waterTableDepth <- NA
+if("waterTableDepth" %in% names(site_data$miscData)) {
+  waterTableDepth <- site_data$miscData$waterTableDepth
+}
+
 if(params$model=="spwb") {
-  input_object <- medfate::forest2spwbInput(site_data$forest_object1, 
-                                            soil_object, 
-                                            site_data$sp_params, 
-                                            control)
+  input_object <- medfate::spwbInput(site_data$forest_object1, 
+                                     soil_object, 
+                                     site_data$sp_params, 
+                                     local_control)
   # input_object <- modifyCohortParams(input_object, site_data$customParams)
   res <- spwb(input_object,
               site_data$meteoData, 
               latitude = site_data$terrainData$latitude, 
               elevation = site_data$terrainData$elevation, 
               slope = site_data$terrainData$slope, 
-              aspect = site_data$terrainData$aspect)
+              aspect = site_data$terrainData$aspect,
+              waterTableDepth = waterTableDepth)
 } else if(params$model=="growth") {
-  input_object <- medfate::forest2growthInput(site_data$forest_object1, 
-                                            soil_object, 
-                                            site_data$sp_params, 
-                                            control)
+  input_object <- medfate::growthInput(site_data$forest_object1, 
+                                       soil_object, 
+                                       site_data$sp_params, 
+                                       local_control)
   # input_object <- modifyCohortParams(input_object, site_data$customParams)
   res <- growth(input_object,
               site_data$meteoData, 
               latitude = site_data$terrainData$latitude, 
               elevation = site_data$terrainData$elevation, 
               slope = site_data$terrainData$slope, 
-              aspect = site_data$terrainData$aspect)
+              aspect = site_data$terrainData$aspect,
+              waterTableDepth = waterTableDepth)
 }
 ```
 

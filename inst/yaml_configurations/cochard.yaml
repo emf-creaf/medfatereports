@@ -1,6 +1,0 @@
-transpirationMode: Cochard
-soilFunctions: VG
-cavitationRefillStem: rate
-cavitationRefillLeaves: total
-segmentedXylemVulnerability: true
-rhizosphereOverlap: total
