@@ -1,4 +1,5 @@
 transpirationMode: Sperry
+soilDomains: dual
 stemCavitationRecovery: rate
 leafCavitationRecovery: total
 segmentedXylemVulnerability: true

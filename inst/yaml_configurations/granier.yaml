@@ -1,3 +1,4 @@
 transpirationMode: Granier
+soilDomains: dual
 stemCavitationRecovery: rate
 leafCavitationRecovery: total

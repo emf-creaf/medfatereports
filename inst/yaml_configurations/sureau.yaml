@@ -1,4 +1,5 @@
 transpirationMode: Sureau
+soilDomains: dual
 stemCavitationRecovery: rate
 leafCavitationRecovery: rate
 segmentedXylemVulnerability: false

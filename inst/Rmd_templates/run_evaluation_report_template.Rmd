@@ -3,7 +3,7 @@ title: "Run & Evaluation report for `r params$code`/`r params$model`/`r params$c
 author: "Victor Granda / Miquel De Cáceres"
 date: "`r Sys.time()`"
 params:
-  wd: '/home/miquel/OneDrive/mcaceres_work/model_development/medfate_development/StandLevelEvaluation/'
+  wd: '/home/miquel/OneDrive/mcaceres_work/model_development/medfate_evaluation/StandLevelEvaluation/'
   code: 'FRAPUE'
   model: 'spwb'
   conf: 'basic'

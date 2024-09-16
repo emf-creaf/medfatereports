@@ -228,6 +228,7 @@ load_remarks <- function(site) {
 #'
 #' @export
 load_list<-function(code, includeTrees = TRUE, includeShrubs = TRUE) {
+  require(traits4models)
   l = list()
   l$siteData <- load_siteData(code)
   l$treeData <- load_treeData(code)
