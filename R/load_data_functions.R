@@ -292,7 +292,7 @@ load_rdatas <- function(type = 'Global') {
 
     for (site in sites) {
       file_creation_info <- file.info(
-        list.files(file.path('Output', packageVersion('medfate')[[1]], site),
+        list.files(file.path('data', 'output', packageVersion('medfate')[[1]], site),
                    pattern = 'RData', full.names = TRUE)
       )
 
@@ -339,7 +339,7 @@ load_rdatas <- function(type = 'Global') {
 
     for (site in sites) {
       file_creation_info <- file.info(
-        list.files(file.path('Output', packageVersion('medfate')[[1]], site),
+        list.files(file.path('data', 'output', packageVersion('medfate')[[1]], site),
                    pattern = 'RData', full.names = TRUE)
       )
 
@@ -377,7 +377,7 @@ load_rdatas <- function(type = 'Global') {
 
     for (site in sites) {
       file_creation_info <- file.info(
-        list.files(file.path('Output', packageVersion('medfate')[[1]], site),
+        list.files(file.path('data', 'output', packageVersion('medfate')[[1]], site),
                    pattern = 'RData', full.names = TRUE)
       )
 

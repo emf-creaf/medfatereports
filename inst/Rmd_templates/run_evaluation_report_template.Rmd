@@ -35,7 +35,7 @@ for(i in 1:length(control_mod)) {
   control[[names(control_mod)[i]]] <- control_mod[[i]]
 }
 
-out_path <- file.path(params$wd, 'Output', packageVersion('medfate')[[1]], params$model, params$conf, params$code)
+out_path <- file.path(params$wd, 'data', 'output', packageVersion('medfate')[[1]], params$model, params$conf, params$code)
 
 site_data <- load_list(params$code)
 ```

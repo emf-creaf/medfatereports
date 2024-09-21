@@ -57,7 +57,7 @@ run_reports <- function(type = 'evaluation',
 
   for(conf in confs) {
     for (code in sites) {
-      report_folder <- file.path('Output', packageVersion('medfate')[[1]],
+      report_folder <- file.path('data', 'output', packageVersion('medfate')[[1]],
                                  model, conf, code)
       report_name <- file.path(report_folder,
                                paste0(type, '_report.html'))
